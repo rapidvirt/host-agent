@@ -11,7 +11,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "rvirt-host",
+	Use:   "rv-host-agent",
 	Short: "rapidvirt host agent application",
 	Long:  "Agent service to expose an API to manage hosts running the KVM hypervisor",
 }
