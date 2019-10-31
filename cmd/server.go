@@ -3,6 +3,7 @@ package cmd
 import (
 	log "github.com/sirupsen/logrus"
 
+	"github.com/rapidvirt/host-agent/net"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,17 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		host, _ := cmd.Flags().GetString("host")
 		port, _ := cmd.Flags().GetInt("port")
-		log.Infof("Start server in %v:%v", host, port)
+
+		conf := &net.Configuration{
+			Address: host,
+			Port:    port,
+		}
+		server := net.NewServer()
+		server.Initialize(conf)
+
+		if err := server.Run(); err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 
