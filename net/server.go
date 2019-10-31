@@ -1,12 +1,12 @@
 package net
 
 import (
-	log "github.com/sirupsen/logrus"
-	
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rapidvirt/host-agent/virt"
+	log "github.com/sirupsen/logrus"
 )
 
 // Configuration to start the server
@@ -22,8 +22,9 @@ func (c *Configuration) ToString() string {
 
 // Server is the application main entry point controller
 type Server struct {
-	router *mux.Router
-	server *http.Server
+	router   *mux.Router
+	server   *http.Server
+	virtConn *virt.Connection
 }
 
 // NewServer creates a new server struct with all default values
@@ -44,6 +45,12 @@ func (s *Server) Initialize(conf *Configuration) {
 
 // Run this server
 func (s *Server) Run() error {
+	conn, err := virt.NewConnection()
+	if err != nil {
+		return err
+	}
+	s.virtConn = conn
+
 	log.Infof("Server %v", s.server.Addr)
 	return s.server.ListenAndServe()
 }
