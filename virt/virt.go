@@ -20,3 +20,8 @@ func NewConnection() (*Connection, error) {
 	virtConn := &Connection{conn}
 	return virtConn, nil
 }
+
+// Close the connection with libvirt
+func (c *Connection) Close() (int, error) {
+	return c.conn.Close()
+}

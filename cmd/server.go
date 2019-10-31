@@ -21,6 +21,7 @@ var serverCmd = &cobra.Command{
 			Port:    port,
 		}
 		server := net.NewServer()
+		defer server.Close()
 		server.Initialize(conf)
 
 		if err := server.Run(); err != nil {

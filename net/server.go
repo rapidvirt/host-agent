@@ -54,3 +54,13 @@ func (s *Server) Run() error {
 	log.Infof("Server %v", s.server.Addr)
 	return s.server.ListenAndServe()
 }
+
+// Close the server connection and release all resources
+func (s *Server) Close() error {
+	err := s.server.Close()
+	if err != nil {
+		return err
+	}
+	_, err = s.virtConn.Close()
+	return err
+}
