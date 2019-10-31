@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rapidvirt/host-agent/virt"
 	log "github.com/sirupsen/logrus"
+	v1service "github.com/rapidvirt/host-agent/services/v1"
 )
 
 // Configuration to start the server
@@ -50,6 +51,10 @@ func (s *Server) Run() error {
 		return err
 	}
 	s.virtConn = conn
+
+	service := v1service.Service{Conn: s.virtConn}
+	v1group := s.router.PathPrefix("/v1").Subrouter()
+	v1group.HandleFunc("/version", service.Version).Methods(http.MethodGet)
 
 	log.Infof("Server %v", s.server.Addr)
 	return s.server.ListenAndServe()

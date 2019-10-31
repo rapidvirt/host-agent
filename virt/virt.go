@@ -6,12 +6,15 @@ import (
 	"github.com/libvirt/libvirt-go"
 )
 
-// Connection to libvirt
+// Connection to libvirt. This struct maintains a pointer to the
+// libvirt connection
 type Connection struct {
 	conn *libvirt.Connect
 }
 
-// NewConnection establish
+// NewConnection establishes the libvirt connection for this server.
+// Note that if the daemon is not available, this method returns an
+// error.
 func NewConnection() (*Connection, error) {
 	conn, err := libvirt.NewConnect("qemu:///system")
 	if err != nil {
@@ -24,4 +27,10 @@ func NewConnection() (*Connection, error) {
 // Close the connection with libvirt
 func (c *Connection) Close() (int, error) {
 	return c.conn.Close()
+}
+
+// GetVersion from the libvirt daemon. This method returns an error
+// if the daemon is not available or reachable
+func (c *Connection) GetVersion() (uint32, error) {
+	return c.conn.GetVersion()
 }
